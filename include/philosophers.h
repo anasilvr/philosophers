@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 15:49:36 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/14 12:49:13 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/14 13:18:04 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void		philo_start(t_control *input);
 void		*philo_do(void *p);
 void		philo_end(t_control *input);
 void		checker(t_control *c);
+void		check_death(t_control *c);
 
 /* philoacts.c */
 void		ph_eat(t_philo *ph);

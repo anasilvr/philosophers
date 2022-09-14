@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 10:09:50 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/14 12:52:29 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/14 13:25:00 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,36 +67,43 @@ void	checker(t_control *c)
 {
 	int	i;
 
-	while (c->game_over != TRUE)
+	i = 0;
+	while (c->game_over == FALSE)
 	{
-		i = -1;
-		while (++i < c->nb_philo && c->game_over != TRUE)
-		{
-			pthread_mutex_lock(&c->checker);
-			if ((timestamp(c) - c->philo[i].t_lastmeal) > c->t_to_die)
-			{
-				c->game_over = TRUE;
-				printf("\t-----> Checking philo[%d]\n", c->philo[i].id);
-				printf("%s", RED);
-				print(c->philo, "died \xF0\x9F\x92\x80");
-			}
-			pthread_mutex_unlock(&c->checker);
-			usleep(100);
-			if (i == c->nb_philo)
-			{	i = -1;
-				printf("%d\n", i);
-			}
-		}
+		check_death(c);
 		if (c->game_over == TRUE)
 			break ;
-		i = 0;
-		while (i < c->nb_philo && c->philo[i].meals_eaten >= c->max_meals - 1)
+		while (i < c->nb_philo)
+		{
+			if (c->philo[i].meals_eaten < c->max_meals)
+				break ;
 			i++;
-		if (i == c->nb_philo && c->max_meals == TRUE)
+		}
+		if (i == c->nb_philo){
 			c->game_over = TRUE;
+			printf("COUCOU\n");
+		}
 	}
 }
-//void	check_death(t_philo *)
+
+void	check_death(t_control *c)
+{
+	int	i;
+
+	i = 0;
+	while (i < c->nb_philo)
+	{
+		pthread_mutex_lock(&c->checker);
+		if ((timestamp(c) - c->philo[i].t_lastmeal) >= c->t_to_die)
+		{
+			c->game_over = TRUE;
+			printf("%s", RED);
+			print(&c->philo[i], "died \xF0\x9F\x92\x80");
+		}
+		pthread_mutex_unlock(&c->checker);
+		i++;
+	}
+}
 
 void	philo_end(t_control *input)
 {
