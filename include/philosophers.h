@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 15:49:36 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/13 16:14:03 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/14 12:49:13 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 
 # define FALSE	0
 # define TRUE	1
-# define MAX_PH 200
 # define ERR_CMD "Command line error. Ex.: ./philo [nb_de_philo] [time_to_die] [time_to_eat]\
  [time_to_sleep] [nb_time_must_eat] (P.s.: [nb_time_must_eat] is optional.)\n"
 # define ERR_MAX "Invalid number of philosophers. Máx.: 200\n"
@@ -43,7 +42,6 @@ typedef struct s_philo
 	long long	t_lastmeal;
 	int			l_fork;
 	int			r_fork;
-	int			is_full;
 	t_control	*args;
 }	t_philo;
 
@@ -55,18 +53,19 @@ typedef struct s_control
 	long long		t_to_eat;
 	long long		t_to_sleep;
 	int				max_meals;
-	t_philo			philo[MAX_PH];
-	pthread_mutex_t	fork[MAX_PH];
+	t_philo			*philo;
+	pthread_mutex_t	*fork;
 	pthread_mutex_t	cout;
 	pthread_mutex_t	checker;
 	int				error;
+	int				end_meal;
 	int				game_over;
 }	t_control;
 
 /* init.c */
 int			check_argv(int argc, char **argv);
-t_control	init_s_control(char **argv);
-void		init_mutexes(t_control *inpuat);
+void	init_s_control(char **argv, t_control *input);
+void		init_mutexes(t_control *input);
 void		init_s_philo(t_control *input);
 
 /* timeutils.c */
@@ -82,12 +81,13 @@ void		print(t_philo *p, char *state);
 
 /* philocontrol.c */
 void		philo_start(t_control *input);
-void		philo_do(void *p);
+void		*philo_do(void *p);
 void		philo_end(t_control *input);
 void		checker(t_control *c);
 
 /* philoacts.c */
-int			ph_take_fork(t_philo *ph);
 void		ph_eat(t_philo *ph);
+void		ph_think(t_philo *ph);
+void		ph_sleep(t_philo *ph);
 
 #endif
