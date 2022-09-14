@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 15:49:36 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/14 13:18:04 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/14 15:55:35 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_control
 
 /* init.c */
 int			check_argv(int argc, char **argv);
-void	init_s_control(char **argv, t_control *input);
+void		init_s_control(char **argv, t_control *input);
 void		init_mutexes(t_control *input);
 void		init_s_philo(t_control *input);
 

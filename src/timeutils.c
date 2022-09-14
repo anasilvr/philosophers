@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 13:23:00 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/09 14:40:15 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/14 15:38:18 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ long long	timestamp(t_control *input)
 	gettimeofday(&current, NULL);
 	return (((current.tv_sec * 1000) + (current.tv_usec / 1000)) - input->t0);
 }
+
 void	ft_sleep(t_philo *p, int t_wait)
 {
 	long long	time_now;

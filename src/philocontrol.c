@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 10:09:50 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/14 13:25:00 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/14 15:55:47 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	philo_start(t_control *input)
 	{
 		i = -1;
 		while (++i < input->nb_philo)
-			pthread_create(&input->philo[i].tid, NULL,\
+			pthread_create(&input->philo[i].tid, NULL, \
 			&philo_do, (void *) &input->philo[i]);
 		checker(input);
 		philo_end(input);
@@ -51,11 +51,8 @@ void	*philo_do(void *p)
 	{
 		if (input->game_over == TRUE)
 			break ;
-		if (input->end_meal == input->nb_philo)
-		{
-			input->game_over = TRUE;
+		if (input->max_meals > 0 && ph->meals_eaten == input->max_meals)
 			break ;
-		}
 		ph_eat(ph);
 		ph_think(ph);
 		ph_sleep(ph);
@@ -73,15 +70,17 @@ void	checker(t_control *c)
 		check_death(c);
 		if (c->game_over == TRUE)
 			break ;
-		while (i < c->nb_philo)
+		if (c->max_meals > 0)
 		{
-			if (c->philo[i].meals_eaten < c->max_meals)
-				break ;
-			i++;
-		}
-		if (i == c->nb_philo){
-			c->game_over = TRUE;
-			printf("COUCOU\n");
+			while (i < c->nb_philo)
+			{
+				if (c->philo[i].meals_eaten < c->max_meals)
+					break ;
+				i++;
+			}
+			if (i == c->nb_philo)
+				c->game_over = TRUE;
+			usleep(50);
 		}
 	}
 }
@@ -98,7 +97,7 @@ void	check_death(t_control *c)
 		{
 			c->game_over = TRUE;
 			printf("%s", RED);
-			print(&c->philo[i], "died \xF0\x9F\x92\x80");
+			printf("%lld %d died \xF0\x9F\x92\x80\n", timestamp(c), c->philo[i].id);
 		}
 		pthread_mutex_unlock(&c->checker);
 		i++;
@@ -111,15 +110,11 @@ void	philo_end(t_control *input)
 
 	i = input->nb_philo;
 	while (--i >= 0)
-	{
 		pthread_join(input->philo[i].tid, NULL);
-		printf("\t-----> Joined philo[%d]\n", input->philo[i].id);
-	}
 	while (++i < input->nb_philo)
 		pthread_mutex_destroy(&input->fork[i]);
 	pthread_mutex_destroy(&input->cout);
 	pthread_mutex_destroy(&input->checker);
-	printf("\t-----> Mutexes destroyed.\n");
 	free(input->philo);
 	free(input->fork);
 	free(input);
