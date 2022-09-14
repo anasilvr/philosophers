@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 10:09:50 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/14 15:55:47 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/14 17:03:38 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,14 @@ void	check_death(t_control *c)
 	int	i;
 
 	i = 0;
-	while (i < c->nb_philo)
+	while (i < c->nb_philo && c->game_over == FALSE)
 	{
 		pthread_mutex_lock(&c->checker);
 		if ((timestamp(c) - c->philo[i].t_lastmeal) >= c->t_to_die)
 		{
-			c->game_over = TRUE;
 			printf("%s", RED);
-			printf("%lld %d died \xF0\x9F\x92\x80\n", timestamp(c), c->philo[i].id);
+			print(&c->philo[i], " died \xF0\x9F\x92\x80");
+			c->game_over = TRUE;
 		}
 		pthread_mutex_unlock(&c->checker);
 		i++;
