@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 10:11:09 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/14 12:36:35 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:26:49 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_argv(int argc, char **argv)
 	while (argv[++i])
 	{
 		res = ft_atoi(argv[i]);
-		if (i == 1 && res >= 200)
+		if (i == 1 && res >= 201)
 		{
 			printf(ERR_MAX);
 			return (-1);
@@ -42,10 +42,12 @@ int	check_argv(int argc, char **argv)
 
 void	init_s_control(char **argv, t_control *input)
 {
+	int	i;
+
+	i = -1;
 	input->error = FALSE;
 	input->game_over = FALSE;
 	input->end_meal = 0;
-	input->t0 = start_time();
 	input->nb_philo = ft_atoi(argv[1]);
 	input->t_to_die = ft_atoi(argv[2]);
 	input->t_to_eat = ft_atoi(argv[3]);
@@ -54,36 +56,14 @@ void	init_s_control(char **argv, t_control *input)
 		input->max_meals = ft_atoi(argv[5]);
 	else
 		input->max_meals = FALSE;
-	input->philo = ft_calloc(input->nb_philo, sizeof(t_philo));
-	input->fork = ft_calloc(input->nb_philo, sizeof(input->fork));
-	init_mutexes(input);
+	input->philo = ft_calloc(input->nb_philo, (sizeof(t_philo)));
+	input->fork = ft_calloc(input->nb_philo, (sizeof(pthread_mutex_t)));
+	pthread_mutex_init(&input->cout, NULL);
+	pthread_mutex_init(&input->checker, NULL);
+	while (++i < input->nb_philo)
+		pthread_mutex_init(&input->fork[i], NULL);
 	init_s_philo(input);
-}
-
-void	init_mutexes(t_control *input)
-{
-	int	i;
-
-	if (pthread_mutex_init(&input->cout, NULL) != 0)
-	{
-		printf("Mutex error! @input->cout");
-		input->error = -1;
-	}
-	i = 0;
-	while (i < input->nb_philo)
-	{
-		if (pthread_mutex_init(&input->fork[i], NULL) != 0)
-		{
-			printf("Mutex error! @input->fork[%i]", i);
-			input->error = -1;
-		}
-		i++;
-	}
-	if (pthread_mutex_init(&input->checker, NULL) != 0)
-	{
-		printf("Mutex error! @input->checker");
-		input->error = -1;
-	}
+	input->t0 = start_time();
 }
 
 void	init_s_philo(t_control *input)

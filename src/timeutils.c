@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 13:23:00 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/14 15:38:18 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:35:05 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ void	ft_sleep(t_philo *p, int t_wait)
 		diff = (timestamp(p->args) - time_now);
 		if (diff >= t_wait)
 			break ;
-		usleep(5);
+		usleep(1000);
 	}
 }

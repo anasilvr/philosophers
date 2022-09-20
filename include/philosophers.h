@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 15:49:36 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/14 15:55:35 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/16 13:59:21 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 # define ERR_CMD "Command line error. Ex.: ./philo [nb_de_philo] [time_to_die] [time_to_eat]\
  [time_to_sleep] [nb_time_must_eat] (P.s.: [nb_time_must_eat] is optional.)\n"
 # define ERR_MAX "Invalid number of philosophers. Máx.: 200\n"
-# define ERR_ARGS "All arguments must be set as greater than zero integers.\n"
+# define ERR_ARGS "All arguments must be set as greater than zero integers\
+ and less than 2147483647.\n"
 
 typedef struct s_control	t_control;
 typedef struct s_philo		t_philo;
@@ -65,7 +66,6 @@ typedef struct s_control
 /* init.c */
 int			check_argv(int argc, char **argv);
 void		init_s_control(char **argv, t_control *input);
-void		init_mutexes(t_control *input);
 void		init_s_philo(t_control *input);
 
 /* timeutils.c */
@@ -80,11 +80,12 @@ void		*ft_calloc(size_t num, size_t size);
 void		print(t_philo *p, char *state);
 
 /* philocontrol.c */
+void		*one_philo(void *p);
 void		philo_start(t_control *input);
 void		*philo_do(void *p);
 void		philo_end(t_control *input);
 void		checker(t_control *c);
-void		check_death(t_control *c);
+void		check_death(t_philo *p);
 
 /* philoacts.c */
 void		ph_eat(t_philo *ph);

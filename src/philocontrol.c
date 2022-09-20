@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 10:09:50 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/14 17:03:38 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/20 10:05:12 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,7 @@ void	philo_start(t_control *input)
 
 	if (input->nb_philo == 1)
 	{
-		while (input->game_over != TRUE)
-		{
-			print(&input->philo[0], "has taken a fork");
-			ft_sleep(&input->philo[0], input->t_to_die);
-			printf("%s", RED);
-			print(&input->philo[0], "died \xF0\x9F\x92\x80");
-			input->game_over = TRUE;
-		}
+		one_philo(input->philo);
 	}
 	else
 	{
@@ -33,8 +26,8 @@ void	philo_start(t_control *input)
 		while (++i < input->nb_philo)
 			pthread_create(&input->philo[i].tid, NULL, \
 			&philo_do, (void *) &input->philo[i]);
-		checker(input);
-		philo_end(input);
+		while (input->game_over == FALSE)
+			checker(input);
 	}
 }
 
@@ -46,11 +39,9 @@ void	*philo_do(void *p)
 	ph = (t_philo *)p;
 	input = ph->args;
 	if (ph->id % 2)
-		usleep(150);
+		usleep(1500);
 	while (input->game_over == FALSE)
 	{
-		if (input->game_over == TRUE)
-			break ;
 		if (input->max_meals > 0 && ph->meals_eaten == input->max_meals)
 			break ;
 		ph_eat(ph);
@@ -62,46 +53,41 @@ void	*philo_do(void *p)
 
 void	checker(t_control *c)
 {
-	int	i;
+	int	meal_i;
+	int	death_i;
 
-	i = 0;
+	meal_i = 0;
+	death_i = 0;
 	while (c->game_over == FALSE)
 	{
-		check_death(c);
-		if (c->game_over == TRUE)
-			break ;
+		check_death(&c->philo[death_i]);
 		if (c->max_meals > 0)
 		{
-			while (i < c->nb_philo)
+			while (meal_i < c->nb_philo)
 			{
-				if (c->philo[i].meals_eaten < c->max_meals)
+				if (c->philo[meal_i].meals_eaten < c->max_meals)
 					break ;
-				i++;
+				meal_i++;
 			}
-			if (i == c->nb_philo)
+			if (meal_i == c->nb_philo)
 				c->game_over = TRUE;
-			usleep(50);
 		}
+		usleep(5000);
+		if (death_i == c->nb_philo -1)
+			death_i = -1;
+		death_i++;
 	}
 }
 
-void	check_death(t_control *c)
+void	check_death(t_philo *p)
 {
-	int	i;
-
-	i = 0;
-	while (i < c->nb_philo && c->game_over == FALSE)
+	pthread_mutex_lock(&p->args->checker);
+	if ((timestamp(p->args) - p->t_lastmeal) >= p->args->t_to_die)
 	{
-		pthread_mutex_lock(&c->checker);
-		if ((timestamp(c) - c->philo[i].t_lastmeal) >= c->t_to_die)
-		{
-			printf("%s", RED);
-			print(&c->philo[i], " died \xF0\x9F\x92\x80");
-			c->game_over = TRUE;
-		}
-		pthread_mutex_unlock(&c->checker);
-		i++;
+		print(p, "died \xF0\x9F\x92\x80");
+		p->args->game_over = TRUE;
 	}
+	pthread_mutex_unlock(&p->args->checker);
 }
 
 void	philo_end(t_control *input)

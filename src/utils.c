@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 10:09:59 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/13 14:55:39 by anarodri         ###   ########.fr       */
+/*   Updated: 2022/09/20 09:56:30 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ void	*ft_calloc(size_t num, size_t size)
 
 void	print(t_philo *p, char *state)
 {
-	if (p->args->game_over != TRUE)
+	if (p->args->game_over == FALSE)
 	{
 		pthread_mutex_lock(&p->args->cout);
-		printf("%lld %d %s\n", timestamp(p->args), p->id, state);
+		printf("%lld\t%d\t%s\n", timestamp(p->args), p->id, state);
 		pthread_mutex_unlock(&p->args->cout);
 	}
 }
