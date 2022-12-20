@@ -1,5 +1,4 @@
 # philosophers
-The basics of threading a process.
 
 📄 [Subject PDF v. 10](https://github.com/anasilvr/philosophers/blob/main/en.subject.pdf)
 
