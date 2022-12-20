@@ -1,6 +1,6 @@
 # philosophers
 
-📄 [Subject PDF v. 10](https://github.com/anasilvr/philosophers/blob/main/en.subject.pdf)
+📄 [Subject PDF v. 10](https://github.com/anasilvr/philosophers/blob/master/en.subject.pdf)
 
 ## Makefile 🔨
 | Command | Usage |
