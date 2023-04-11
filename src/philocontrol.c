@@ -6,7 +6,7 @@
 /*   By: anarodri <anarodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 10:09:50 by anarodri          #+#    #+#             */
-/*   Updated: 2022/09/20 10:05:12 by anarodri         ###   ########.fr       */
+/*   Updated: 2023/04/11 14:40:54 by anarodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	*philo_do(void *p)
 		if (input->max_meals > 0 && ph->meals_eaten == input->max_meals)
 			break ;
 		ph_eat(ph);
-		ph_think(ph);
 		ph_sleep(ph);
+		ph_think(ph);
 	}
 	return (NULL);
 }
